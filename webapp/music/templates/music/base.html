@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}音乐信息网站{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="{% url 'song_list' %}">🎵 音乐信息站</a>
+    <nav>
+      <a href="{% url 'song_list' %}">歌曲</a>
+      <a href="{% url 'singer_list' %}">歌手</a>
+    </nav>
+    <form class="search-form" action="{% url 'search' %}" method="get">
+      <input type="text" name="q" maxlength="20" placeholder="搜索歌曲/歌手..." value="{{ request.GET.q }}">
+      <span class="radio-group">
+        <label><input type="radio" name="type" value="song" {% if request.GET.type != 'singer' %}checked{% endif %}> 歌曲</label>
+        <label><input type="radio" name="type" value="singer" {% if request.GET.type == 'singer' %}checked{% endif %}> 歌手</label>
+      </span>
+      <button type="submit">搜索</button>
+    </form>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

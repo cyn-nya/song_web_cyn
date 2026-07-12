@@ -1,0 +1,34 @@
+{% extends "music/base.html" %}
+{% block title %}{{ singer.name }} - 音乐信息站{% endblock %}
+{% block content %}
+<div class="detail-header">
+  {% if singer.image %}
+    <img src="/media/{{ singer.image }}" alt="{{ singer.name }}">
+  {% else %}
+    <img src="https://placehold.co/220x220?text=No+Image" alt="no image">
+  {% endif %}
+  <div class="info">
+    <h1>{{ singer.name }}</h1>
+    <p>{{ singer.bio|default:"暂无简介"|linebreaksbr }}</p>
+    {% if singer.source_url %}
+      <p><a class="source-link" href="{{ singer.source_url }}" target="_blank" rel="noopener">查看原始网站 ↗</a></p>
+    {% endif %}
+  </div>
+</div>
+
+<h2>该歌手的歌曲（{{ songs|length }}）</h2>
+<div class="grid">
+  {% for song in songs %}
+    <a class="card" href="{% url 'song_detail' song.id %}">
+      {% if song.image %}
+        <img src="/media/{{ song.image }}" alt="{{ song.name }}">
+      {% else %}
+        <img src="https://placehold.co/160x160?text=No+Image" alt="no image">
+      {% endif %}
+      <div class="card-body"><div class="card-title">{{ song.name }}</div></div>
+    </a>
+  {% empty %}
+    <p>该歌手暂无收录歌曲。</p>
+  {% endfor %}
+</div>
+{% endblock %}

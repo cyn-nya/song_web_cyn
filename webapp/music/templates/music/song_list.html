@@ -1,0 +1,23 @@
+{% extends "music/base.html" %}
+{% block title %}歌曲列表 - 音乐信息站{% endblock %}
+{% block content %}
+<h1>歌曲列表</h1>
+<div class="grid">
+  {% for song in page_obj %}
+    <a class="card" href="{% url 'song_detail' song.id %}">
+      {% if song.image %}
+        <img src="/media/{{ song.image }}" alt="{{ song.name }}">
+      {% else %}
+        <img src="https://placehold.co/200x200?text=No+Image" alt="no image">
+      {% endif %}
+      <div class="card-body">
+        <div class="card-title">{{ song.name }}</div>
+        <div class="card-sub">{{ song.singer.name }}</div>
+      </div>
+    </a>
+  {% empty %}
+    <p>暂无歌曲数据，请先运行爬虫并导入数据库。</p>
+  {% endfor %}
+</div>
+{% include "music/pagination.html" %}
+{% endblock %}

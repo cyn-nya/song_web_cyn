@@ -1,0 +1,47 @@
+{% extends "music/base.html" %}
+{% block title %}{{ song.name }} - 音乐信息站{% endblock %}
+{% block content %}
+<div class="detail-header">
+  {% if song.image %}
+    <img src="/media/{{ song.image }}" alt="{{ song.name }}">
+  {% else %}
+    <img src="https://placehold.co/220x220?text=No+Image" alt="no image">
+  {% endif %}
+  <div class="info">
+    <h1>{{ song.name }}</h1>
+    <p>歌手：<a href="{% url 'singer_detail' song.singer.id %}">{{ song.singer.name }}</a></p>
+    {% if song.source_url %}
+      <p><a class="source-link" href="{{ song.source_url }}" target="_blank" rel="noopener">查看原始网站 ↗</a></p>
+    {% endif %}
+  </div>
+</div>
+
+<h2>歌词</h2>
+<div class="lyric-box">{{ song.lyric|default:"暂无歌词" }}</div>
+
+<h2>评论（{{ comments|length }}）</h2>
+<div class="comment-form">
+  <form method="post" action="{% url 'add_comment' song.id %}">
+    {% csrf_token %}
+    <textarea name="content" maxlength="1000" placeholder="写下你的评论..." required></textarea><br>
+    <button type="submit">发表评论</button>
+  </form>
+</div>
+
+<ul class="comment-list">
+  {% for c in comments %}
+    <li class="comment-item">
+      <div>
+        <div>{{ c.content }}</div>
+        <div class="meta">{{ c.created_at }}</div>
+      </div>
+      <form method="post" action="{% url 'delete_comment' c.id %}">
+        {% csrf_token %}
+        <button type="submit" class="delete-btn">删除</button>
+      </form>
+    </li>
+  {% empty %}
+    <p>暂无评论，快来抢沙发～</p>
+  {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+
+# Django
+webapp_src/db.sqlite3
+webapp_src/media/
+webapp_src/staticfiles/
+
+# 爬虫产生的数据（体积较大，一般不进Git；提交时按作业要求酌情打包附上）
+crawler/data/
+
+# 分析输出图表（如需提交请单独复制到实验报告里，不必进Git历史）
+analysis/output/
+
+# IDE
+.vscode/
+.idea/

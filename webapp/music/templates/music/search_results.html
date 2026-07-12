@@ -1,0 +1,28 @@
+{% extends "music/base.html" %}
+{% block title %}搜索结果 - 音乐信息站{% endblock %}
+{% block content %}
+<h1>搜索结果：“{{ query }}”（{% if search_type == 'song' %}歌曲{% else %}歌手{% endif %}）</h1>
+<p class="search-meta">共找到 {{ result_count }} 条结果，耗时 {{ elapsed_ms }} 毫秒</p>
+
+<div class="grid">
+  {% for item in page_obj %}
+    {% if search_type == 'song' %}
+      <a class="card" href="{% url 'song_detail' item.id %}">
+        {% if item.image %}<img src="/media/{{ item.image }}" alt="{{ item.name }}">{% else %}<img src="https://placehold.co/160x160?text=No+Image">{% endif %}
+        <div class="card-body">
+          <div class="card-title">{{ item.name }}</div>
+          <div class="card-sub">{{ item.singer.name }}</div>
+        </div>
+      </a>
+    {% else %}
+      <a class="card" href="{% url 'singer_detail' item.id %}">
+        {% if item.image %}<img src="/media/{{ item.image }}" alt="{{ item.name }}">{% else %}<img src="https://placehold.co/160x160?text=No+Image">{% endif %}
+        <div class="card-body"><div class="card-title">{{ item.name }}</div></div>
+      </a>
+    {% endif %}
+  {% empty %}
+    <p>没有找到相关结果，换个关键词试试？</p>
+  {% endfor %}
+</div>
+{% include "music/pagination.html" with extra_qs="q="|add:query|add:"&type="|add:search_type|add:"&" %}
+{% endblock %}

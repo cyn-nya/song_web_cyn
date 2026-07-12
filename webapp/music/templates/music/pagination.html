@@ -1,0 +1,31 @@
+{# 通用分页控件：首页/尾页/上一页/下一页/页码按钮/输入页码跳转 #}
+{% if page_obj.paginator.num_pages > 1 %}
+<div class="pagination">
+  <a href="?{{ extra_qs }}page=1">首页</a>
+  {% if page_obj.has_previous %}
+    <a href="?{{ extra_qs }}page={{ page_obj.previous_page_number }}">上一页</a>
+  {% endif %}
+
+  {% for num in page_obj.paginator.page_range %}
+    {% if num == page_obj.number %}
+      <span class="current">{{ num }}</span>
+    {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+      <a href="?{{ extra_qs }}page={{ num }}">{{ num }}</a>
+    {% endif %}
+  {% endfor %}
+
+  {% if page_obj.has_next %}
+    <a href="?{{ extra_qs }}page={{ page_obj.next_page_number }}">下一页</a>
+  {% endif %}
+  <a href="?{{ extra_qs }}page={{ page_obj.paginator.num_pages }}">尾页</a>
+
+  <form method="get" action="">
+    {% for key, value in request.GET.items %}
+      {% if key != 'page' %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endif %}
+    {% endfor %}
+    <input type="number" name="page" min="1" max="{{ page_obj.paginator.num_pages }}" placeholder="页码">
+    <button type="submit">跳转</button>
+  </form>
+  <span>共 {{ page_obj.paginator.num_pages }} 页</span>
+</div>
+{% endif %}
